@@ -1,0 +1,4 @@
+Flask
+langgraph
+langchain-google-genai
+gunicorn
