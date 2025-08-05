@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // This URL points to a local Flask backend. For a live deployment, this
         // would be the URL from your Render service, e.g.,
         // const apiUrl = "https://your-backend-service.onrender.com/api/recommendations";
-        const apiUrl = "/api/recommendations";
+        const apiUrl = "https://electrobot-ojzk.onrender.com";
 
         try {
             const response = await fetch(apiUrl, {
@@ -162,4 +162,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Start with the first step
     showStep(1);
+
 });
