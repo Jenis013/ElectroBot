@@ -8,10 +8,12 @@ from langchain_core.messages import HumanMessage
 # Initialize Flask app
 app = Flask(__name__)
 
-# Set Gemini API Key
-# The API key is now directly in the script as requested.
-# For production, it is safer to use environment variables.
-os.environ["GOOGLE_API_KEY"] = "AIzaSyDfSI0PTT7YNdhV14DtgdzRZoZbMkwpp8c"
+# Get API key from environment variable (set this in Render dashboard)
+os.environ["GOOGLE_API_KEY"] = os.getenv("GOOGLE_API_KEY")
+if not os.environ["GOOGLE_API_KEY"]:
+    raise ValueError("Missing GOOGLE_API_KEY environment variable.")
+
+# Initialize Gemini model
 llm = ChatGoogleGenerativeAI(model="models/gemini-1.5-flash-latest", temperature=0.3)
 
 def classify_usage(state: dict) -> dict:
@@ -42,13 +44,10 @@ def get_recommendations(state: dict) -> dict:
     """
     
     try:
-        # Using a structured response schema for the LLM call
         response = llm.invoke([HumanMessage(content=prompt)], response_mime_type="application/json")
-        response_json_text = response.content
-        recommendations_data = json.loads(response_json_text)
+        recommendations_data = json.loads(response.content)
     except Exception as e:
         print(f"Error calling LLM or parsing response: {e}")
-        # Fallback in case of an error
         recommendations_data = {
             "tips for less electric uses": ["Could not generate tips."],
             "Idea for Renewable energy": ["Could not generate ideas."],
@@ -66,13 +65,10 @@ def handle_recommendations():
         "usage_kwh": data.get("usage_kwh"),
     }
     
-    # Classify usage and get recommendations
     classified_state = classify_usage(state)
     final_state = get_recommendations(classified_state)
     
     return jsonify(final_state["recommendations"])
 
 if __name__ == '__main__':
-    # To run this server, you would need to install Flask: pip install Flask
-    # And then run it with: python chatbot_server.py
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000)
