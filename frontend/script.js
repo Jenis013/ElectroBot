@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
             appliances: state.appliances,
             usage_kwh: state.usage_kwh
         };
-        const apiUrl = "https://your-backend.onrender.com/api/recommendations";
+        const apiUrl = "https://electrobot-ojzk.onrender.com/api/recommendations";
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -125,3 +125,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     showStep(1);
 });
+
